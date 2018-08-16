@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id "org.springframework.boot" version "2.0.4.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+}
+
+group 'andrey.shlykov'
+version '0.1-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_10
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework.boot',  name: 'spring-boot-starter'
+    compile group: 'org.springframework.shell', name: 'spring-shell-starter'
+}

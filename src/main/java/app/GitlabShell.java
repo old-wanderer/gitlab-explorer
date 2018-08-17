@@ -1,5 +1,7 @@
 package app;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -9,6 +11,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author : Andrei Shlykov
@@ -30,17 +33,23 @@ public class GitlabShell {
                 .scheme("https")
                 .host("gitlab.com")
                 .addPathSegment("api").addPathSegments("v4").addPathSegment("projects")
-                .addQueryParameter("visibility", "private")
+                .addQueryParameter("membership", "true")
+                .addQueryParameter("per_page", "100")
+                .addQueryParameter("simple", "true")
                 .addQueryParameter("private_token", "vt3tJ2XaveYsmMZ2wp_b")
                 .build();
         var request = new Request.Builder()
                 .url(url)
-//                .addHeader("Private-Token", "vt3tJ2XaveYsmMZ2wp_b")
                 .build();
         try {
             System.out.println(url.toString());
             Response response = client.newCall(request).execute();
-            System.out.println(response.body().string());
+            if (response.body() != null) {
+                System.out.println(response.headers());
+                var type = new TypeToken<List<GitlabProject>>(){}.getType();
+                List<GitlabProject> projects = new Gson().fromJson(response.body().charStream(), type);
+                projects.stream().map(GitlabProject::getPathWithNamespace).sorted().forEach(System.out::println);
+            }
         } catch (IOException err) {
             err.printStackTrace();
         }

@@ -8,28 +8,27 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author : Andrei Shlykov
- * @since : 17/08/2018
+ * @since : 2018-09-09
  */
-@ShellComponent
-public class GitlabShell {
+@Component
+public class GitLabController {
 
     private final OkHttpClient client;
 
     @Autowired
-    public GitlabShell(OkHttpClient client) {
+    public GitLabController(OkHttpClient client) {
         this.client = client;
     }
 
-    @ShellMethod("Get your projects")
-    public void projects() {
+    public List<GitLabProject> projects() throws IOException {
         var url = new HttpUrl.Builder()
                 .scheme("https")
                 .host("gitlab.com")
@@ -42,17 +41,15 @@ public class GitlabShell {
         var request = new Request.Builder()
                 .url(url)
                 .build();
-        try {
-            System.out.println(url.toString());
-            Response response = client.newCall(request).execute();
-            if (response.body() != null) {
-                System.out.println(response.headers());
-                var type = new TypeToken<List<GitLabProject>>(){}.getType();
-                List<GitLabProject> projects = new Gson().fromJson(response.body().charStream(), type);
-                projects.stream().map(GitLabProject::getPathWithNamespace).sorted().forEach(System.out::println);
-            }
-        } catch (IOException err) {
-            err.printStackTrace();
+
+        System.out.println(url.toString());
+        Response response = client.newCall(request).execute();
+        if (response.body() != null) {
+            System.out.println(response.headers());
+            var type = new TypeToken<List<GitLabProject>>(){}.getType();
+            return new Gson().fromJson(response.body().charStream(), type);
+        } else {
+            return Collections.emptyList();
         }
     }
 

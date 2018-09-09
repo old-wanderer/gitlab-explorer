@@ -1,4 +1,4 @@
-package app;
+package explorer.entity;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -35,7 +35,6 @@ public class GitlabProject {
 //        parent_id : PrimitiveDouble
 //        path      : PrimitiveString
 //    }
-//    path                : PrimitiveString
     private String path;
     @SerializedName("path_with_namespace")
     private String pathWithNamespace;

@@ -1,7 +1,8 @@
-package app;
+package explorer.app;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import explorer.entity.GitlabProject;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

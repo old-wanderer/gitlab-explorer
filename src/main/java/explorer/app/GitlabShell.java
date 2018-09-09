@@ -2,7 +2,7 @@ package explorer.app;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import explorer.entity.GitlabProject;
+import explorer.entity.GitLabProject;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -47,9 +47,9 @@ public class GitlabShell {
             Response response = client.newCall(request).execute();
             if (response.body() != null) {
                 System.out.println(response.headers());
-                var type = new TypeToken<List<GitlabProject>>(){}.getType();
-                List<GitlabProject> projects = new Gson().fromJson(response.body().charStream(), type);
-                projects.stream().map(GitlabProject::getPathWithNamespace).sorted().forEach(System.out::println);
+                var type = new TypeToken<List<GitLabProject>>(){}.getType();
+                List<GitLabProject> projects = new Gson().fromJson(response.body().charStream(), type);
+                projects.stream().map(GitLabProject::getPathWithNamespace).sorted().forEach(System.out::println);
             }
         } catch (IOException err) {
             err.printStackTrace();

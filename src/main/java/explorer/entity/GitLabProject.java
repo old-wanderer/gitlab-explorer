@@ -8,7 +8,7 @@ import java.util.List;
  * @author : Andrei Shlykov
  * @since : 17/08/2018
  */
-public class GitlabProject {
+public class GitLabProject {
 
     @SerializedName("avatar_url")
     private String avatarUrl;
@@ -26,15 +26,8 @@ public class GitlabProject {
     private String lastActivityAt;
     private String name;
     @SerializedName("name_with_namespace")
-    private String name_with_namespace;
-//  namespace           : {
-//        full_path : PrimitiveString
-//        id        : PrimitiveDouble
-//        kind      : PrimitiveString
-//        name      : PrimitiveString
-//        parent_id : PrimitiveDouble
-//        path      : PrimitiveString
-//    }
+    private String nameWithNamespace;
+    private GitLabNamespace namespace;
     private String path;
     @SerializedName("path_with_namespace")
     private String pathWithNamespace;
@@ -121,12 +114,12 @@ public class GitlabProject {
         this.name = name;
     }
 
-    public String getName_with_namespace() {
-        return name_with_namespace;
+    public String getNameWithNamespace() {
+        return nameWithNamespace;
     }
 
-    public void setName_with_namespace(String name_with_namespace) {
-        this.name_with_namespace = name_with_namespace;
+    public void setNameWithNamespace(String nameWithNamespace) {
+        this.nameWithNamespace = nameWithNamespace;
     }
 
     public String getPath() {
@@ -183,5 +176,13 @@ public class GitlabProject {
 
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
+    }
+
+    public GitLabNamespace getNamespace() {
+        return namespace;
+    }
+
+    public void setNamespace(GitLabNamespace namespace) {
+        this.namespace = namespace;
     }
 }

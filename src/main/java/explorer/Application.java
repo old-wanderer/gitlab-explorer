@@ -1,4 +1,4 @@
-package explorer.app;
+package explorer;
 
 import okhttp3.OkHttpClient;
 import org.springframework.boot.SpringApplication;

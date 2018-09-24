@@ -1,6 +1,7 @@
 package explorer.app;
 
 import explorer.entity.GitLabProject;
+import explorer.repository.GitLabProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -16,9 +17,12 @@ public class GitLabShell {
 
     private final GitLabController gitLabController;
 
+    private final GitLabProjectRepository projectRepository;
+
     @Autowired
-    public GitLabShell(GitLabController gitLabController) {
+    public GitLabShell(GitLabController gitLabController, GitLabProjectRepository projectRepository) {
         this.gitLabController = gitLabController;
+        this.projectRepository = projectRepository;
     }
 
     @ShellMethod("Get your projects")
@@ -34,4 +38,12 @@ public class GitLabShell {
         }
     }
 
+    @ShellMethod("Get your projects")
+    public void load() {
+        try {
+            gitLabController.projects();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -2,13 +2,18 @@ package explorer.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author : Andrei Shlykov
  * @since : 17/08/2018
  */
+@Entity
 public class GitLabProject {
+
+    @Id
+    private Long id;
 
     @SerializedName("avatar_url")
     private String avatarUrl;
@@ -21,12 +26,12 @@ public class GitLabProject {
     private int forksCount;
     @SerializedName("http_url_to_repo")
     private String httpUrlToRepo;
-    private int id;
     @SerializedName("last_activity_at")
     private String lastActivityAt;
     private String name;
     @SerializedName("name_with_namespace")
     private String nameWithNamespace;
+    @ManyToOne
     private GitLabNamespace namespace;
     private String path;
     @SerializedName("path_with_namespace")
@@ -38,7 +43,9 @@ public class GitLabProject {
     @SerializedName("star_count")
     private int startCount;
     @SerializedName("tag_list")
-    private List<String> tags;
+    @ElementCollection
+    @CollectionTable(name = "project_tags")
+    private Set<String> tags;
     @SerializedName("web_url")
     private String webUrl;
 
@@ -90,11 +97,11 @@ public class GitLabProject {
         this.httpUrlToRepo = httpUrlToRepo;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -162,11 +169,11 @@ public class GitLabProject {
         this.startCount = startCount;
     }
 
-    public List<String> getTags() {
+    public Set<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 

@@ -1,11 +1,14 @@
 package explorer.app;
 
 import explorer.entity.GitLabProject;
+import explorer.repository.GitLabProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author : Andrei Shlykov
@@ -16,16 +19,26 @@ public class GitLabShell {
 
     private final GitLabController gitLabController;
 
+    private final GitLabProjectRepository projectRepository;
+
     @Autowired
-    public GitLabShell(GitLabController gitLabController) {
+    public GitLabShell(GitLabController gitLabController, GitLabProjectRepository projectRepository) {
         this.gitLabController = gitLabController;
+        this.projectRepository = projectRepository;
     }
 
-    @ShellMethod("Get your projects")
-    public void projects() {
+    @ShellMethod("Show your projects")
+    public void projects(@ShellOption(value = {"-u", "--update"}, defaultValue = "false") boolean update) {
         try {
-            gitLabController.projects()
-                    .stream()
+            List<GitLabProject> projects;
+            if (update) {
+                projects = gitLabController.projects();
+                projectRepository.saveAll(projects);
+            } else {
+                projects = projectRepository.findAll();
+            }
+
+            projects.stream()
                     .map(GitLabProject::getPathWithNamespace)
                     .sorted()
                     .forEach(System.out::println);

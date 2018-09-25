@@ -2,20 +2,30 @@ package explorer.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
+
 /**
  * @author : Andrei Shlykov
  * @since : 2018-09-09
  */
+@Entity
 public class GitLabNamespace {
+
+    @Id
+    private String id;
 
     @SerializedName("full_path")
     private String fullPath;
-    private String id;
     private String kind;
     private String name;
     @SerializedName("parent_id")
     private Integer parentId;
     private String path;
+    @OneToMany
+    private Set<GitLabProject> project;
 
     public String getFullPath() {
         return fullPath;
@@ -63,5 +73,13 @@ public class GitLabNamespace {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public Set<GitLabProject> getProject() {
+        return project;
+    }
+
+    public void setProject(Set<GitLabProject> project) {
+        this.project = project;
     }
 }

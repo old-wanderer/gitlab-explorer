@@ -25,7 +25,7 @@ public class GitLabShell {
         this.projectRepository = projectRepository;
     }
 
-    @ShellMethod("Get your projects")
+    @ShellMethod("Show your projects")
     public void projects() {
         try {
             gitLabController.projects()
@@ -38,12 +38,23 @@ public class GitLabShell {
         }
     }
 
-    @ShellMethod("Get your projects")
+    @ShellMethod("Store your projects")
     public void load() {
         try {
-            gitLabController.projects();
+            var projects = gitLabController.projects();
+            projectRepository.saveAll(projects);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    @ShellMethod("Show stored projects")
+    public void show() {
+        projectRepository.findAll()
+                .stream()
+                .map(GitLabProject::getPathWithNamespace)
+                .sorted()
+                .forEach(System.out::println);
+    }
+
 }

@@ -31,7 +31,7 @@ public class GitLabProject {
     private String name;
     @SerializedName("name_with_namespace")
     private String nameWithNamespace;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private GitLabNamespace namespace;
     private String path;
     @SerializedName("path_with_namespace")

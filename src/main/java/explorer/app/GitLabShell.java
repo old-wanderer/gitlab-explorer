@@ -5,8 +5,10 @@ import explorer.repository.GitLabProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author : Andrei Shlykov
@@ -26,35 +28,23 @@ public class GitLabShell {
     }
 
     @ShellMethod("Show your projects")
-    public void projects() {
+    public void projects(@ShellOption(value = {"-u", "--update"}, defaultValue = "false") boolean update) {
         try {
-            gitLabController.projects()
-                    .stream()
+            List<GitLabProject> projects;
+            if (update) {
+                projects = gitLabController.projects();
+                projectRepository.saveAll(projects);
+            } else {
+                projects = projectRepository.findAll();
+            }
+
+            projects.stream()
                     .map(GitLabProject::getPathWithNamespace)
                     .sorted()
                     .forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @ShellMethod("Store your projects")
-    public void load() {
-        try {
-            var projects = gitLabController.projects();
-            projectRepository.saveAll(projects);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @ShellMethod("Show stored projects")
-    public void show() {
-        projectRepository.findAll()
-                .stream()
-                .map(GitLabProject::getPathWithNamespace)
-                .sorted()
-                .forEach(System.out::println);
     }
 
 }
